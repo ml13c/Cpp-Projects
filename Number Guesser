@@ -1,0 +1,51 @@
+/*
+task
+generate random number(1-100) and have user interact and try to guess it. they have multiple tries
+
+steps
+find a way to generate a random number
+assign this random number to a int and have it as a bool
+ask user to input a number 1-100
+ask them to guess the random number
+using a while loop or do check if the number
+is the right one
+to check it use a bool
+if false return not the right number
+if true say guessed number right and terminate loop
+*/
+#include <random>
+#include <iostream>
+using namespace std;
+//generates a random number 1-100 each time program is ran
+/*
+
+*/
+int inputnum;
+int randomn;
+bool guess(int x){
+    if(x==randomn){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+int main(){
+        randomn = (rand() % 100)+1;//generates same number(42) every time so will fix later
+    cout <<"Guess a number 1-100"<<endl;
+        while(inputnum!=randomn){
+            cin >> inputnum;
+        cout<<"You entered "<<inputnum<<endl;
+    if(guess(inputnum)){
+        cout <<"You guessed correctly"<<endl;
+        break;
+    }
+    if(inputnum==0){
+       cout<<"The number was "<<randomn<<endl;
+       break;
+    }
+    else{
+        cout <<"Did not guess right"<<endl;
+    }
+}
+}
