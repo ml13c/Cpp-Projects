@@ -1,0 +1,72 @@
+/*PLAN
+store questions
+    is the character farmable through store
+    how much to buy from store
+    how much currency earned a week
+    ask what store it is obtainable through
+    cases for cantina,guildactivity,squadarena,galacticwar,fleet,guildevents,shards,conquest
+    availability of shards in store
+    if you buy them every time will obtain character in (shipmentcalc) days
+energy questions
+    how many energy nodes is char farmable
+    how many refreshes a day on node 1/2/...
+    on average you will get(droprate)
+    if you refresh (refreshamt) you will obtain (character) in () days
+if both ship and farmable
+combine both for if && if
+maybe use array cause of all int used
+*/
+#define maxshards 330
+#define charnode 2
+#define shipshard 10
+//#define pguild
+float droprate = .33;
+int nodeamts;
+#include <string>
+#include <iostream>
+using namespace std;
+int main(){
+    int shardsamt;
+    string type, isboth;
+    cout << "Is the character farmable through shipments? [y/n]"<<endl;
+    cin >> type;
+    cout << "How many shards do you already have?"<<endl;
+    cin >> shardsamt;
+    cout <<"Amount of Shards for character1: "<< shardsamt<<endl;;
+        
+        if (type == "y"){
+            cout <<"Can it also be obtained through nodes? [y/n]"<<endl;
+                cin >> isboth;
+//if farmable through ship and node
+        if (isboth =="y"){
+                cout <<"How many nodes is the character farmable through?"<<endl;
+                cin >> nodeamts;
+                int battleamts = nodeamts*10;//doing 10 instead of 5 assuming refreshes are done
+                int shardsleft = maxshards-shardsamt;
+                int shipment_appearances =2;//set as 2 for default for now
+                int daystofarm= (shardsleft)/((10*shipment_appearances)+(battleamts*droprate*charnode));
+                cout<<"Assuming there are "<<shipment_appearances<<" appearances in the store ";
+                cout<< "and "<<battleamts<<" battles done a day"<<endl;
+                cout<<"You will obtain "<<shardsleft<<" shards in "<<daystofarm<<" days."<<endl;
+        }
+//if only farmable through shipments
+            else{
+                int shardsleft = maxshards-shardsamt;
+                int shipment_appearances = 2;//default as 2 per day for now
+                int daystofarm = (shardsleft)/(10*shipment_appearances);
+                cout<<"Assuming there are "<<shipment_appearances<<" appearances in the store"<<endl;
+                cout<<"You will obtain "<<shardsleft<<" shards in "<<daystofarm<<" days."<<endl;
+            }
+
+        }
+//if only farmable through nodes
+        else {
+            cout <<"How many nodes is the character farmable through?"<<endl;
+                cin >> nodeamts;
+                int battleamts = nodeamts*10;//doing 10 instead of 5 assuming refreshes are done
+                int shardsleft = maxshards-shardsamt;
+                int daystofarm = (shardsleft)/(battleamts*droprate*charnode);
+            cout << "Assuming "<< battleamts <<" battles are done a day you will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<endl; 
+        }
+    cout <<"ending program" <<endl;//temporary
+}
