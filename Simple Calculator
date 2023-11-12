@@ -1,0 +1,54 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+    double num1, num2;//number to store
+    char o;//operator
+    string keepgoing;
+    string power;//power function
+    cout<<"program start"<<endl;
+        cin >> power;
+    //on and off button
+        if(power=="ON"||power=="on"){
+            cout <<"CALCULATOR ON"<<endl;
+        }
+    while((power=="ON")||(power=="on"))
+    {
+        cin >> num1 >> o >> num2;
+         // Perform the calculation based on the operator
+            switch (o)
+            {
+                case '+'://addition
+                    cout << num1 + num2 << endl;
+                    break;//break so it stops here and doesnt run other operators
+    
+                case '-'://subtraction
+                    cout << num1 - num2 << endl;
+                    break;
+    
+                case '*'://multiplication
+                    cout << num1 * num2 << endl;
+                    break;
+    
+                case '/'://division
+                    if (num2 == 0){//cant be divisible by zero
+                     cout <<"Error"<< endl;
+                     break;
+                    }
+                    else{
+                    cout<< num1 / num2 << endl;
+                    break;
+                    }
+                default:
+                cout<<"Error:Please use (+,-,*,/)"<<endl;//if operator is not correct
+                break;
+                }
+            cout<<"Keep going?"<<endl;
+            cin >>keepgoing;
+            if((keepgoing=="n")||(keepgoing=="NO")||(keepgoing=="no")||keepgoing==("N")){//off
+                cout <<"CALCULATOR OFF"<<endl;
+                power="off";
+                return 0;
+            }
+    }
+}
