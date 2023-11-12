@@ -1,0 +1,31 @@
+from tkinter import *
+from time import *
+
+def update():
+    time_string = strftime("%H:%M:%S %p")#24 hour style
+    time_label.config(text=time_string)#converts to string/display
+    
+    date_string = strftime("%B %d, %Y")#same process
+    date_label.config(text=date_string)
+    
+    dayname_string = strftime("%A")#same process
+    dayname_label.config(text=dayname_string)
+
+    window.after(1000,update)#all updates every 1000 milliseconds
+
+
+window = Tk()
+
+time_label = Label(window,font=("Tw Cen MT Condensed",50),fg="#9B4A80",bg="#23297A")#order matters for display
+time_label.pack()
+
+date_label = Label(window,font=("Tw Cen MT Condensed",30), fg="#9B4A80", bg="#23297a")
+date_label.pack()
+
+dayname_label = Label(window,font=("Tw Cen MT Condensed",30,"bold"), fg="#9B4A80", bg="#23297a")
+dayname_label.pack()
+
+
+update() #after every second updates
+
+window.mainloop()
