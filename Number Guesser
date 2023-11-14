@@ -1,5 +1,6 @@
 #include <random>
 #include <iostream>
+#include <time.h>
 using namespace std;
 int inputnum;
 int randomn;
@@ -12,7 +13,8 @@ bool guess(int x){
     }
 }
 int main(){
-        randomn = (rand() % 100)+1;//generates same number(42) every time so will fix later
+    srand(time(0));
+        randomn = (rand() % 100)+1;
     cout <<"Guess a number 1-100"<<endl;
     cout <<"If you wish to quit enter 0"<<endl;
         while(inputnum!=randomn){
