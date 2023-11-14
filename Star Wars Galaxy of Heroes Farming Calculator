@@ -1,72 +1,361 @@
-/*PLAN
-store questions
-    is the character farmable through store
-    how much to buy from store
-    how much currency earned a week
-    ask what store it is obtainable through
-    cases for cantina,guildactivity,squadarena,galacticwar,fleet,guildevents,shards,conquest
-    availability of shards in store
-    if you buy them every time will obtain character in (shipmentcalc) days
-energy questions
-    how many energy nodes is char farmable
-    how many refreshes a day on node 1/2/...
-    on average you will get(droprate)
-    if you refresh (refreshamt) you will obtain (character) in () days
-if both ship and farmable
-combine both for if && if
-maybe use array cause of all int used
-*/
-#define maxshards 330
-#define charnode 2
-#define shipshard 10
-//#define pguild
-float droprate = .33;
-int nodeamts;
+//maybe use hashmap and look into it
+//character related
+    #define onecharnode 1
+    #define twocharnode 2
+    #define tencharshipmentshard 10
+    #define fivecharshipmentshard 5
+    #define fifteencharshipmentshard 15
+    #define thirtycharactershipmentshard 30
+//ship related
+
+//standard
+    float droprate = .33;
+    #define maxshards 330
+
 #include <string>
 #include <iostream>
-using namespace std;
-int main(){
-    int shardsamt;
-    string type, isboth;
-    cout << "Is the character farmable through shipments? [y/n]"<<endl;
-    cin >> type;
-    cout << "How many shards do you already have?"<<endl;
-    cin >> shardsamt;
-    cout <<"Amount of Shards for character1: "<< shardsamt<<endl;;
-        
-        if (type == "y"){
-            cout <<"Can it also be obtained through nodes? [y/n]"<<endl;
-                cin >> isboth;
-//if farmable through ship and node
-        if (isboth =="y"){
-                cout <<"How many nodes is the character farmable through?"<<endl;
-                cin >> nodeamts;
-                int battleamts = nodeamts*10;//doing 10 instead of 5 assuming refreshes are done
-                int shardsleft = maxshards-shardsamt;
-                int shipment_appearances =2;//set as 2 for default for now
-                int daystofarm= (shardsleft)/((10*shipment_appearances)+(battleamts*droprate*charnode));
-                cout<<"Assuming there are "<<shipment_appearances<<" appearances in the store ";
-                cout<< "and "<<battleamts<<" battles done a day"<<endl;
-                cout<<"You will obtain "<<shardsleft<<" shards in "<<daystofarm<<" days."<<endl;
+int main()
+{
+//initialize variables
+    int starsamt;
+    int starsshards;
+    int refreshamts;
+    int nodeamts;
+    int charshardamts;
+    std::string charactername;
+
+    std::cout << "What is the characters in game name?"<<std::endl;
+    getline(std::cin, charactername);
+
+//add star amount of shards to calculations
+        std::cout << "How many stars?"<<std::endl;
+        std::cin >> starsamt;
+        if (starsamt<=7 && starsamt>=0)
+        {
+            switch(starsamt)
+            {
+            case 7:
+                starsshards = maxshards;
+                break;
+            case 6:
+                starsshards = 230;
+                break;
+            case 5:
+                starsshards = 145;
+                break;
+            case 4:
+                starsshards = 80;
+                break;
+            case 3:
+                starsshards = 50;
+                break;
+            case 2:
+                starsshards =25;
+                break;
+            case 1:
+                starsshards = 10;
+                break;
+            default:
+                std::cout<<"Invalid star amount"<<std::endl;
+            }
         }
-//if only farmable through shipments
-            else{
-                int shardsleft = maxshards-shardsamt;
-                int shipment_appearances = 2;//default as 2 per day for now
-                int daystofarm = (shardsleft)/(10*shipment_appearances);
-                cout<<"Assuming there are "<<shipment_appearances<<" appearances in the store"<<endl;
-                cout<<"You will obtain "<<shardsleft<<" shards in "<<daystofarm<<" days."<<endl;
+        else
+        {
+            std::cout<<"Not a valid star amount"<<std::endl;
+            return 0;
+        }    
+//shards obtained and refreshes a day   
+    std::cout << "How many shards do you have for "<<charactername<<" at "<<starsamt<<" stars"<<"?"<<std::endl;
+    std::cin >> charshardamts;
+    std::cout << "How many refreshes a day?"<<std::endl;
+    std::cin >> refreshamts;
+
+//Calculations for 256 characters and their obtainable shards as of 11/13/2023(as of right now only focusing on characters farmable only thorugh normal energy
+//(going to exclude conquest,legendary, and GLs)
+        //501st
+            if(charactername=="ARC Trooper")//Cantina Battles
+            {
+                int battleamts = ((165+(120*refreshamts))/12);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (5-G Cantina)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="CT-21-0408 Echo")
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(fifteencharshipmentshard);
+                std::cout<<charactername<<" is only obtainable through Fleet & Guild Activity"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="CT-5555 Fives")//Energy, Cantina Currency, and Fleet 
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/((battleamts*droprate*twocharnode)+(fifteencharshipmentshard));
+                std::cout<<charactername<<" is only obtainable through (2-D Dark)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="CT-7567 Rex")//fleet store and guild activity
+            {
+
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(fifteencharshipmentshard);
+                std::cout<<charactername<<" is only obtainable through Fleet and Guild Activity Shipments"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Ahsoka Tano")//energy, cantina shipment, and Fleet
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/((battleamts*droprate*twocharnode)+(fifteencharshipmentshard));
+                std::cout<<charactername<<" is only obtainable through Fleet Shipment, Cantina Shipment, & (1-B Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="General Skywalker")//Guild Events Store and Legendary Character
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(tencharshipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Guild & Guild Events Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
             }
 
+        //BAD BATCH
+            if(charactername=="Wrecker")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (7-C Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Echo")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (7-D Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Omega")//fleet
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (4-D Fleet)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Hunter")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (5-B Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Tech")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (5-F Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+        
+        //SITH
+            if(charactername=="Bastila Shan (Fallen)")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (7-A Dark)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Count Dooku")//cantina
+            {
+                int battleamts = ((165+(120*refreshamts))/12);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (6-G Cantina)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Malak")//Guild Events Store and Legendary Character
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(tencharshipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Guild & Guild Events Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Malgus")//Conquest character
+            {
+                std::cout<<"On Hard Conquest Malgus take 3 conquests to obtain so around 3-4 months"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Maul")//Fleet and Guild Store
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(thirtycharactershipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Fleet and twice in the Guild Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Revan")//Legendary Character
+            {
+                std::cout<<"Darth Revan is only obtainable through the Journey Guide"<<std::endl;
+                std::cout<<"On average(starting from scratch) it takes 2-3 months to unlock him"<<std::endl;
+            }
+            if(charactername=="Darth Sidious")//Shipment Character
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(fifteencharshipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Squad Arena Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Talon")
+            {
+                int battleamts = ((165+(120*refreshamts))/16);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (7-G Cantina)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Traya")//Shipment Character
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(thirtycharactershipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Guild & Guild Events Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Vader")
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(fivecharshipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Achievements and Fleet Store so progression varies"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Emperor Palpatine")//Legendary Character
+            {
+                std::cout<<"Palpatine is only available through the Journey Guide"<<std::endl;
+                std::cout<<"On average it takes one month starting from scratch"<<std::endl;
+            }
+            if(charactername=="Lord Vader")//GL
+            {
+                std::cout<<"Lord Vader is only available through the Journey Guide"<<std::endl;
+                std::cout<<"On average it takes 5-7 months starting from scratch"<<std::endl;
+            }
+            if(charactername=="Savage Opress")
+            {
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(fifteencharshipmentshard);//assuming
+                std::cout<<charactername<<" is only obtainable through Squad Arena Store"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Sith Assassin")
+            {
+                int battleamts = ((165+(120*refreshamts))/12);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/((battleamts*droprate*twocharnode)+(thirtycharactershipmentshard));
+                std::cout<<charactername<<" is only obtainable through Guild Activity Store, and Guild Store, 6-C Cantina"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Sith Empire Trooper")
+            {
+                int battleamts = ((165+(120*refreshamts))/16);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (8-B Cantina)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Sith Eternal Emperor")//GL
+            {
+                std::cout<<"Sith Eternal Emperor is only available through the Journey Guide"<<std::endl;
+                std::cout<<"On average it takes 5-7 months starting from scratch"<<std::endl;
+            }
+            if(charactername=="Sith Marauder")
+            {
+                int battleamts = ((165+(120*refreshamts))/12);
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (6-E Cantina)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Sith Trooper")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (2-B Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Nihilus")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (9-H DARK)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+            if(charactername=="Darth Sion")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (9-A Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0; 
+            }
+        
+        //REBELS
+            if(charactername=="Threepio & Chewie")
+            {
+                nodeamts=1;
+                int battleamts = nodeamts*5*refreshamts;
+                int shardsleft = maxshards-charshardamts-starsshards;
+                int daystofarm = (shardsleft)/(battleamts*droprate*twocharnode);
+                std::cout<<charactername<<" is only obtainable through (7-A Light)"<<std::endl;
+                std::cout<<"You will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<std::endl;
+                return 0;
+            }
+        //REPEAT SIMILAR PROCESS FOR ALL OTHER CHARACTERS
+        //Error
+        else
+        {
+            std::cout<<"Invalid Character Information please try again"<<std::endl;
+            return 0;
         }
-//if only farmable through nodes
-        else {
-            cout <<"How many nodes is the character farmable through?"<<endl;
-                cin >> nodeamts;
-                int battleamts = nodeamts*10;//doing 10 instead of 5 assuming refreshes are done
-                int shardsleft = maxshards-shardsamt;
-                int daystofarm = (shardsleft)/(battleamts*droprate*charnode);
-            cout << "Assuming "<< battleamts <<" battles are done a day you will obtain "<<shardsleft<<" shards in " <<daystofarm<<" days"<<endl; 
-        }
-    cout <<"ending program" <<endl;//temporary
 }
