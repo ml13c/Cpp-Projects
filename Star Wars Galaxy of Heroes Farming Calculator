@@ -1,7 +1,8 @@
-//501st map attempt#1
 #include<iostream>
 #include<map>
 #include<string>
+#define maxshards 330
+float droprate = .33;
 
 struct FiveoFirst
 {
@@ -15,27 +16,79 @@ int main()
     std::map<std::string, FiveoFirst> five01Map;
     five01Map["Ahsoka Tano"] = FiveoFirst { "Ahsoka Tano", "Fleet Shipment, Cantina Shipment, & (1-B Light)", 1, 2, 15};
     five01Map["Arc Trooper"] = FiveoFirst { "Arc Trooper", "((5-G Cantina))", 1, 2, 0};
-    five01Map["CT-21-0408 ""Echo"""] = FiveoFirst { "CT-21-0408 ""Echo""", "Fleet & Guild Activity", 0, 0, 15};
-    five01Map["CT-555 ""Fives"""] = FiveoFirst { "CT-555 ""Fives""", "(2-D Dark), Cantina Currency, and Fleet", 1, 2, 15};
-    five01Map["CT-7567 ""Rex"""] = FiveoFirst { "CT-7567 ""Rex""", "Fleet and Guild Activity Shipments", 0, 0, 15};
+    five01Map["CT-21-0408 ""Echo"""] = FiveoFirst { "CT-21-0408 Echo", "Fleet & Guild Activity", 0, 0, 15};//add quotes to trooper names
+    five01Map["CT-555 ""Fives"""] = FiveoFirst { "CT-5555 Fives", "(2-D Dark), Cantina Currency, and Fleet", 1, 2, 15};
+    five01Map["CT-7567 ""Rex"""] = FiveoFirst { "CT-7567 Rex", "Fleet and Guild Activity Shipments", 0, 0, 15};
     five01Map["General Skywalker"] = FiveoFirst { "General Skywalker", "Guild & Guild Events Store", 0, 0, 10};
-    //DATA FOR 501st
+    /*DATA FOR 501st
         FiveoFirst& ahoskatanoData = five01Map["Ahsoka Tano"];
         FiveoFirst& arctrooperData = five01Map["Arc Trooper"];
-        FiveoFirst& ctechoData = five01Map["CT-21-0408 ""Echo"""];
-        FiveoFirst& ctfivesData = five01Map["CT-555 ""Fives"""];
-        FiveoFirst& ctrexData = five01Map["CT-7567 ""Rex"""];
-        FiveoFirst& GASData = five01Map["General Skywalker"];
+        FiveoFirst& ctechoData = five01Map["CT-21-0408 Echo"];
+        FiveoFirst& ctfivesData = five01Map["CT-555 Fives"];
+        FiveoFirst& ctrexData = five01Map["CT-7567 Rex"];
+        FiveoFirst& GASData = five01Map["General Skywalker"];*/
 
-//iterator list elements of ALL 501 characters
-std::map<std::string, FiveoFirst>::iterator iter;
-for(iter = five01Map.begin(); iter != five01Map.end(); ++iter){
-    std::cout << "Key: " << iter->first << std::endl;
-    std::cout << "Values: " << iter->second.Charactername << ", " 
-              << iter->second.Location << ", " 
-              << iter->second.Nodeamount << ", " 
-              << iter->second.Nodeamount << ", " 
-              << iter->second.charactershipmentshardamount << std::endl;
+//Ask user for character name and retrieve data
+int shardsamt;
+int starsamt;
+int starsshards;
+int shardsremaining;
+int daystofarm;
+int refreshamts;
+    std::string askname;
+    std::cout<<"What is the characters in game name AS IS?"<<std::endl;
+    getline(std::cin, askname);
+    std::cout<<"How many refreshes a day?"<<std::endl;
+    std::cin >>refreshamts;
+    std::cout<<"How many stars?"<<std::endl;
+    std::cin >> starsamt;
+    //calculates how many shards already obtained based on star level
+        if (starsamt<=7 && starsamt>=0)
+        {
+            switch(starsamt)
+            {
+            case 7:
+                starsshards = maxshards;
+                break;
+            case 6:
+                starsshards = 230;
+                break;
+            case 5:
+                starsshards = 145;
+                break;
+            case 4:
+                starsshards = 80;
+                break;
+            case 3:
+                starsshards = 50;
+                break;
+            case 2:
+                starsshards =25;
+                break;
+            case 1:
+                starsshards = 10;
+                break;
+            default:
+                std::cout<<"Invalid star amount"<<std::endl;
+            }
+        }
+
+    std::cout<<"How many shards?"<<std::endl;
+    std::cin>>shardsamt;
+    shardsremaining= maxshards-(shardsamt+starsshards); 
+    
+//map find character and data, also calculations
+std::map<std::string, FiveoFirst>::iterator iter = five01Map.find(askname);
+if(iter != five01Map.end()){
+    std::cout << "Character: " << iter->first << std::endl;
+    std::cout << "Data: " << iter->second.Charactername << ", Accessible through:" 
+              << iter->second.Location << std::endl; 
+              std::cout<<"Will obtain "<<shardsremaining<<" shards in "<< 
+              (daystofarm = (shardsremaining)/
+              ((iter->second.Nodeamount*5*refreshamts*droprate*iter->second.NodeShardamount)+(iter->second.charactershipmentshardamount)))
+            <<" days." << std::endl;
+} else {
+    std::cout << "Character not found in the map." << std::endl;
 }
     return 0;
 }
