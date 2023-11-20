@@ -1,3 +1,24 @@
+/*
+HOW IT WORKS
+In Star Wars Galaxy of Heroes characters are obtainable through shards. These shards accumulate and after a certain amount
+they are upgradable to a star amount. The max amount of stars is 7. All characters have a max of 7 stars or 330 shards.
+Some characters are obtainable through one or more locations known as a node. These nodes can be played 5 times each day.
+You can choose to refresh the node to play 5 more times. 
+These nodes contain the shards of a certain character and either award 1 or 2 shards.
+Some characters can be obtained through nodes and shipments or are exclusive to shipments.
+Shipments are a group of stores in which you buy 10 shards of a character using a type of currency.
+Sometimes there are more than 10 shards some specific characters.
+These shipments are rotated every couple of hours throughout the day.
+There are around 256 characters some of which are not obtainable through either shipments or nodes.
+All of the obtainabe characters can be "Farmed"/obtained in a certain amount of time depending on the battles done a day as well as->
+if they are also obtainable through shipments.
+Because of each characters unique location and obtainability they each have their own data
+This data is used to calculate how long it wil take to farm based off of refresh amounts, and how many shards have already been obtained.
+As of 11/20/2023
+
+
+
+*/
 #include<iostream>
 #include<map>
 #include<string>
