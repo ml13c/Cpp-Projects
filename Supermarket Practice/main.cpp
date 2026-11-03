@@ -1,9 +1,6 @@
-//create a for loop that counts to 10
-#include <iostream>
+#include "RetailItem.h"
 
 int main() {
-    for (int i = 1; i <= 10; i++) {
-        std::cout << i << std::endl;
-    }
-    return 0;
+    RetailItem cereal("Cheerios", RetailItemType::Cereal);
+    cereal.display();
 }
