@@ -1,6 +1,6 @@
-#include "RetailItem.h"
-
+#include "Cereal.h"
 int main() {
-    RetailItem cereal("Cheerios", RetailItemType::Cereal);
+    Cereal cereal("Cheerios");
     cereal.display();
+    return 0;
 }
